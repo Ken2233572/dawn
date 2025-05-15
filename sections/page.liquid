@@ -1,21 +1,42 @@
 {{ 'section-main-page.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  .section-{{ section.id }} {
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    text-align: center;
   }
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
+  .section-{{ section.id }} .page-title {
+    font-family: 'Playfair Display', serif; /* Example of an elegant font */
+    font-size: {{ section.settings.heading_size | times: 1.2 }}rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .section-{{ section.id }} .rte {
+    font-family: 'Roboto', sans-serif; /* Clean body font */
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .section-{{ section.id }} .scroll-trigger {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .section-{{ section.id }} .scroll-trigger.animate--slide-in {
+    opacity: 1;
+    transform: translateY(0);
   }
 {%- endstyle -%}
 
-<div class="color-{{ section.settings.color_scheme }} gradient">
-  <div class="page-width page-width--narrow section-{{ section.id }}-padding">
+<div class="section-{{ section.id }}">
+  <div class="page-width">
     <h2 class="page-title {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
       {%- if section.settings.page.title != blank -%}
         {{ section.settings.page.title | escape }}
@@ -37,80 +58,58 @@
 
 {% schema %}
 {
-  "name": "t:sections.page.name",
-  "tag": "section",
-  "class": "section",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
+  "name": "Elegant Page Section",
   "settings": [
     {
       "type": "page",
       "id": "page",
-      "label": "t:sections.page.settings.page.label"
+      "label": "Page"
     },
     {
       "type": "select",
       "id": "heading_size",
+      "label": "Heading Size",
       "options": [
-        {
-          "value": "h2",
-          "label": "t:sections.all.heading_size.options__1.label"
-        },
-        {
-          "value": "h1",
-          "label": "t:sections.all.heading_size.options__2.label"
-        },
-        {
-          "value": "h0",
-          "label": "t:sections.all.heading_size.options__3.label"
-        },
-        {
-          "value": "hxl",
-          "label": "t:sections.all.heading_size.options__4.label"
-        },
-        {
-          "value": "hxxl",
-          "label": "t:sections.all.heading_size.options__5.label"
-        }
+        { "value": "h1", "label": "Large" },
+        { "value": "h2", "label": "Medium" },
+        { "value": "h3", "label": "Small" }
       ],
-      "default": "h1",
-      "label": "t:sections.all.heading_size.label"
+      "default": "h1"
     },
     {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "scheme-1"
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
     },
     {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
     },
     {
       "type": "range",
       "id": "padding_top",
+      "label": "Padding Top",
       "min": 0,
       "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
+      "step": 5,
+      "default": 50
     },
     {
       "type": "range",
       "id": "padding_bottom",
+      "label": "Padding Bottom",
       "min": 0,
       "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
+      "step": 5,
+      "default": 50
     }
   ],
   "presets": [
     {
-      "name": "t:sections.page.presets.name"
+      "name": "Elegant Page"
     }
   ]
 }
